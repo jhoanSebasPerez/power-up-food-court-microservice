@@ -1,8 +1,8 @@
 <br />
 <div align="center">
-<h3 align="center">PRAGMA POWER-UP - USER MICROSERVICE</h3>
+<h3 align="center">PRAGMA POWER-UP - FOOD COURT MICROSERVICE</h3>
   <p align="center">
-    This repository contains the files related to the microservice that manages the <i><strong>Users</strong></i> of the ordering platform. 
+    This repository contains the files related to the microservice that manages the <i><strong>food court</strong></i> of the ordering platform. 
   </p>
 </div>
 
