@@ -1,7 +1,11 @@
 server:
   port: 8095
+jwt:
+  secret: ${KEYSECRET_SECURITY:5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437}
 
 spring:
+  application:
+    name: FOOD-COURT-SERVICE
   datasource:
     url: jdbc:mysql://localhost/food-court
     username: root
@@ -9,9 +13,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-jwt:
-  secret: ${KEYSECRET_SECURITY:eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.nZU_gPcMXkWpkCUpJceSxS7lSickF0tTImHhAR949Z-Nt69LgW8G6lid-mqd9B579tYM8C4FN2jdhR2VRMsjtA}
-  expiration: ${EXPIRE_DAYS_SECURITY:3600000}
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8761/eureka/
 
 management:
   endpoints:

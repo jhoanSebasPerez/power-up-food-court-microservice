@@ -23,10 +23,25 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.4'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.0.1'
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.0.4'
+	implementation 'com.nimbusds:nimbus-jose-jwt:9.30.2'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.2'
+
+	//implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.2.7.RELEASE'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard:2.2.10.RELEASE'
+	//implementation 'org.springframework.boot:spring-boot-starter-actuator:3.1.0'
+	testImplementation 'junit:junit:4.13.1'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5',
+			'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test:6.1.0'
+
 
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 

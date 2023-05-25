@@ -1,8 +1,6 @@
 package com.pragma.powerup.foodcourtmicroservice.adapters.driven.jpa.mysql.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +23,7 @@ public class RestaurantEntity {
     private String phone;
     private String urlLogo;
 
-    @Column(name = "customer_id")
-    private String customerId;
+    @Column(name = "owner_dni")
+    private String ownerDni;
 
 }

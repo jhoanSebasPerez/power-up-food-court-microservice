@@ -1,26 +1,33 @@
 package com.pragma.powerup.foodcourtmicroservice.domain.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 public class Restaurant {
+
+    private Long id;
     private String name;
     private String nit;
     private String address;
     private String phone;
     private String urlLogo;
-    private Long customerId;
+    private String ownerDni;
 
     public Restaurant() {
     }
 
-    public Restaurant(String name, String nit, String address, String phone, String urlLogo, Long customerId) {
+    public Restaurant(String name, String nit, String address, String phone, String urlLogo, String ownerDni) {
         this.name = name;
         this.nit = nit;
         this.address = address;
         this.phone = phone;
         this.urlLogo = urlLogo;
-        this.customerId = customerId;
+        this.ownerDni = ownerDni;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -63,11 +70,11 @@ public class Restaurant {
         this.urlLogo = urlLogo;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public String getOwnerDni() {
+        return ownerDni;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setOwnerDni(String ownerDni) {
+        this.ownerDni = ownerDni;
     }
 }
