@@ -41,6 +41,18 @@ public class DishUseCase implements IDishServicePort {
         dishPersistencePort.updateDish(dish);
     }
 
+    @Override
+    public boolean enableDisable(String ownerDni, Dish dish, boolean enable) {
+        if(!isOwnerRestaurant(ownerDni, dish.getRestaurant().getId()))
+            throw new NotRestaurantOwnerException();
+        return dishPersistencePort.enableDisable(dish, enable);
+    }
+
+    @Override
+    public Dish findById(Long id) {
+        return dishPersistencePort.findById(id);
+    }
+
 
     private boolean isOwnerRestaurant(String ownerDni, Long idRestaurant) {
         Restaurant restaurant = restaurantPersistencePort.findById(idRestaurant);

@@ -20,8 +20,17 @@ public class Constants {
 
     public static final String RESPONSE_MESSAGE_KEY = "message";
 
+    public static final String ERROR_MESSAGE_KEY = "error";
+
     /**
      * Restaurant constants
      */
     public static final String RESTAURANT_CREATED_MESSAGE = "restaurant created successful";
+
+    /**
+     * Dish constants
+     */
+    public static final String DISH_CREATED_MESSAGE = "dish created successful";
+
+    public static final String DISH_UPDATED_MESSAGE = "the dish has been updated";
 }

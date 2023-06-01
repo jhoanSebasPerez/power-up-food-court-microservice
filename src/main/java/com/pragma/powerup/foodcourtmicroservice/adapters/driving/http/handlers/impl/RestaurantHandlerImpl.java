@@ -2,15 +2,18 @@ package com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.handlers.
 
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.client.IUserClient;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.response.RestaurantItemDto;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.exceptions.ClientErrorException;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.handlers.IRestaurantHandler;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.mapper.IRestaurantRequestMapper;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.mapper.IRestaurantResponseMapper;
 import com.pragma.powerup.foodcourtmicroservice.domain.api.IRestaurantServicePort;
+import com.pragma.powerup.foodcourtmicroservice.domain.model.Restaurant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -23,8 +26,8 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
     private final IUserClient userClient;
 
     @Override
-    public void saveRestaurant(RestaurantRequestDto restaurantRequestDto) {
-        Map<String, Boolean> body = userClient.isOwner(restaurantRequestDto.getOwnerDni()).getBody();
+    public void saveRestaurant(String token, RestaurantRequestDto restaurantRequestDto) {
+        Map<String, Boolean> body = userClient.isOwner(token, restaurantRequestDto.getOwnerDni());
         if(body == null)
             throw new ClientErrorException("Type owner dni");
         boolean isOwner = body.get("response");
@@ -37,6 +40,13 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
     public RestaurantResponseDto findById(Long idRestaurant) {
         return restaurantResponseMapper.toResponseDto(restaurantServicePort.findById(idRestaurant));
     }
+
+    @Override
+    public List<RestaurantItemDto> listRestaurant(Integer pageNumber, Integer pageSize) {
+        List<Restaurant> restaurants = restaurantServicePort.findAllRestaurant(pageNumber, pageSize);
+        return restaurantResponseMapper.toRestaurantResponseList(restaurants);
+    }
+
 
 
 }

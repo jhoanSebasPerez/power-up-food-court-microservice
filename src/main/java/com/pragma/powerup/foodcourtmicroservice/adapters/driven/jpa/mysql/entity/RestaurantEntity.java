@@ -1,17 +1,14 @@
 package com.pragma.powerup.foodcourtmicroservice.adapters.driven.jpa.mysql.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "restaurant")
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class RestaurantEntity {
 
     @Id

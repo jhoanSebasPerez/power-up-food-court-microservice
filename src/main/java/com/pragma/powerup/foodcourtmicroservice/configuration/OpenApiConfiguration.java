@@ -1,5 +1,8 @@
 package com.pragma.powerup.foodcourtmicroservice.configuration;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.Schema;
@@ -13,6 +16,7 @@ import io.swagger.v3.oas.models.info.License;
 import java.util.Map;
 
 @Configuration
+@SecurityScheme(name = "jwt", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class OpenApiConfiguration {
 
     @Bean

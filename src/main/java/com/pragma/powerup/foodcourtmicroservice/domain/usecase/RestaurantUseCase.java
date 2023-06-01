@@ -4,6 +4,8 @@ import com.pragma.powerup.foodcourtmicroservice.domain.api.IRestaurantServicePor
 import com.pragma.powerup.foodcourtmicroservice.domain.model.Restaurant;
 import com.pragma.powerup.foodcourtmicroservice.domain.spi.IRestaurantPersistencePort;
 
+import java.util.List;
+
 public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
@@ -20,5 +22,10 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     @Override
     public Restaurant findById(Long idRestaurant) {
         return restaurantPersistencePort.findById(idRestaurant);
+    }
+
+    @Override
+    public List<Restaurant> findAllRestaurant(Integer pageNumber, Integer pageSize) {
+        return restaurantPersistencePort.findAllRestaurant(pageNumber,pageSize);
     }
 }
