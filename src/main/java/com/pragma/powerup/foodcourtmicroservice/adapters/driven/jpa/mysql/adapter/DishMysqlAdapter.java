@@ -7,6 +7,8 @@ import com.pragma.powerup.foodcourtmicroservice.adapters.driven.jpa.mysql.reposi
 import com.pragma.powerup.foodcourtmicroservice.domain.model.Dish;
 import com.pragma.powerup.foodcourtmicroservice.domain.spi.IDishPersistencePort;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -48,5 +50,13 @@ public class DishMysqlAdapter implements IDishPersistencePort {
             throw new DishNotFound();
 
         return dishEntityMapper.toModel(dishOptional.get());
+    }
+
+    @Override
+    public boolean existAllDishesByRestaurant(Long idRestaurant, List<Long> dishesIds) {
+        List<Object> dishesReturned = dishRepository
+                .dishesExistsByRestaurant(idRestaurant, dishesIds);
+
+        return dishesIds.size() == dishesReturned.size();
     }
 }

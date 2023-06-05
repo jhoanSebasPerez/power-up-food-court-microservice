@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -69,7 +70,7 @@ class RestaurantControllerTest {
                 .andExpect(jsonPath(String.format("$.%s", Constants.RESPONSE_MESSAGE_KEY))
                         .value(Constants.RESTAURANT_CREATED_MESSAGE));
 
-        verify(restaurantHandler).saveRestaurant(any(RestaurantRequestDto.class));
+        verify(restaurantHandler).saveRestaurant(anyString(), any(RestaurantRequestDto.class));
     }
 
     @Test

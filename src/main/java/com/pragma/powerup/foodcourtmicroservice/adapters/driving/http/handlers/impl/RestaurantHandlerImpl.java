@@ -2,13 +2,16 @@ package com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.handlers.
 
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.client.IUserClient;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.response.RestaurantItemDto;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.exceptions.ClientErrorException;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.handlers.IRestaurantHandler;
+import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.mapper.IDishRequestMapper;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.mapper.IRestaurantRequestMapper;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.mapper.IRestaurantResponseMapper;
 import com.pragma.powerup.foodcourtmicroservice.domain.api.IRestaurantServicePort;
+import com.pragma.powerup.foodcourtmicroservice.domain.model.Dish;
 import com.pragma.powerup.foodcourtmicroservice.domain.model.Restaurant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
     private final IRestaurantServicePort restaurantServicePort;
     private final IRestaurantRequestMapper restaurantRequestMapper;
     private final IRestaurantResponseMapper restaurantResponseMapper;
+    private final IDishRequestMapper dishRequestMapper;
     private final IUserClient userClient;
 
     @Override
@@ -47,6 +51,11 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
         return restaurantResponseMapper.toRestaurantResponseList(restaurants);
     }
 
+    @Override
+    public List<DishResponseDto> findAllDishes(Long restaurantId, String categoryName, Integer pageNumber, Integer pageSize) {
+        List<Dish> dishes = restaurantServicePort.findAllDishes(restaurantId, categoryName, pageNumber, pageSize);
+        return dishRequestMapper.toDishResponseList(dishes);
+    }
 
 
 }

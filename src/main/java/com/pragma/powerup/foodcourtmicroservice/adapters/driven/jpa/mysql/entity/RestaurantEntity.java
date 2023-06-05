@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
 public class RestaurantEntity {
 
     @Id

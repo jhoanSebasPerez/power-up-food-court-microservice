@@ -21,7 +21,7 @@ public class DishHandlerImpl implements IDishHandler {
 
     @Override
     public void saveDish(String token, DishRequestDto dishRequestDto) {
-        String ownerDni = JwtUtil.getOwnerDni(token);
+        String ownerDni = JwtUtil.getDniFromToken(token);
         dishServicePort.saveDish(ownerDni, dishRequestMapper.toDish(dishRequestDto));
     }
 
@@ -36,7 +36,7 @@ public class DishHandlerImpl implements IDishHandler {
         restaurant.setId(dishUpdateDto.getRestaurantId());
         dish.setRestaurant(restaurant);
 
-        String ownerDni = JwtUtil.getOwnerDni(token);
+        String ownerDni = JwtUtil.getDniFromToken(token);
 
         dishServicePort.updateDish(ownerDni, dish);
     }
@@ -45,7 +45,7 @@ public class DishHandlerImpl implements IDishHandler {
     public boolean enableDisable(String token, Long dishId, boolean enable) {
         Dish dish = dishServicePort.findById(dishId);
 
-        String ownerDni = JwtUtil.getOwnerDni(token);
+        String ownerDni = JwtUtil.getDniFromToken(token);
 
         return dishServicePort.enableDisable(ownerDni, dish, enable);
     }

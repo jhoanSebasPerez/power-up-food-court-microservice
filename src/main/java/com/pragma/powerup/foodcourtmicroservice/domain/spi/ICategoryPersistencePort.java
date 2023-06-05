@@ -7,4 +7,6 @@ public interface ICategoryPersistencePort {
     void saveCategory(Category category);
 
     boolean existById(Long categoryId);
+
+    Category findByName(String categoryName);
 }

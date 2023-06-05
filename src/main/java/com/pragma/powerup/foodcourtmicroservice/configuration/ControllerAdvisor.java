@@ -4,6 +4,7 @@ package com.pragma.powerup.foodcourtmicroservice.configuration;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFound;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.exceptions.ClientErrorException;
 import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.CategoryNotFoundException;
+import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.DishesNotBelongRestaurantException;
 import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.NotRestaurantOwnerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,12 @@ public class ControllerAdvisor {
     public ResponseEntity<Map<String, String>> handleAuthenticationException(AuthenticationException noDataFoundException) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Collections.singletonMap(Constants.ERROR_MESSAGE_KEY, "Wrong credentials or role not allowed"));
+    }
+
+    @ExceptionHandler(DishesNotBelongRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handleAuthenticationException(DishesNotBelongRestaurantException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(Constants.ERROR_MESSAGE_KEY, "All dishes must belong to the same restaurant"));
     }
 
     @ExceptionHandler(ClientErrorException.class)

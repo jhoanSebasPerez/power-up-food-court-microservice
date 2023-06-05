@@ -33,4 +33,10 @@ public class Constants {
     public static final String DISH_CREATED_MESSAGE = "dish created successful";
 
     public static final String DISH_UPDATED_MESSAGE = "the dish has been updated";
+
+    /**
+     * Order constants
+     */
+    public static final String ORDER_CREATED_MESSAGE = "order created successful";
+
 }

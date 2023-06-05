@@ -4,8 +4,6 @@ import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTParser;
 import com.pragma.powerup.foodcourtmicroservice.configuration.security.exception.TokenException;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -15,9 +13,7 @@ import org.springframework.security.core.authority.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import java.security.Key;
 import java.util.Map;
 
 @Slf4j
@@ -45,7 +41,7 @@ public class JwtUtil {
         return roles.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
-    public static String getOwnerDni(String token) {
+    public static String getDniFromToken(String token) {
         Map<String, Object> claims = null;
         try {
             claims = getClaims(token.substring(7));

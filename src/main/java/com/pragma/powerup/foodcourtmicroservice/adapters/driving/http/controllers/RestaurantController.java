@@ -1,6 +1,7 @@
 package com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.controllers;
 
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.response.RestaurantItemDto;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.handlers.IRestaurantHandler;
@@ -64,9 +65,25 @@ public class RestaurantController {
                     })
     @GetMapping("")
     @PreAuthorize("hasRole('ROLE_USER')")
-    ResponseEntity<List<RestaurantItemDto>> getRestaurant(@RequestParam(required = false) Integer pageNumber,
+    ResponseEntity<List<RestaurantItemDto>> getRestaurants(@RequestParam(required = false) Integer pageNumber,
                                                           @RequestParam(required = false) Integer pageSize){
         List<RestaurantItemDto> response = restaurantHandler.listRestaurant(pageNumber, pageSize);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "List dishes of a restaurant and as well apply category filter",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "List of dishes",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+            })
+    @GetMapping("/{restaurantId}/dishes")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    ResponseEntity<List<DishResponseDto>> findAllDishes(
+            @PathVariable(name = "restaurantId")Long restaurantId,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) Integer pageSize){
+        List<DishResponseDto> response = restaurantHandler.findAllDishes(restaurantId, category, pageNumber, pageSize);
         return ResponseEntity.ok(response);
     }
 }
