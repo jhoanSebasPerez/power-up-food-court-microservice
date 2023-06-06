@@ -1,6 +1,7 @@
 package com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.controllers;
 
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.request.OrderRequestDto;
+import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.foodcourtmicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,5 +40,21 @@ public class OrderController {
         orderHandler.saveOrder(token, orderRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CREATED_MESSAGE));
+    }
+
+    @Operation(summary = "List orders by state and pagination",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "List of orders",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+            })
+    @GetMapping()
+    @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+    ResponseEntity<List<OrderResponseDto>> findAllByState(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam(required = true) String state,
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) Integer pageSize){
+        List<OrderResponseDto> response = orderHandler.findAllByRestaurantAndState(token, state, pageNumber, pageSize);
+        return ResponseEntity.ok(response);
     }
 }

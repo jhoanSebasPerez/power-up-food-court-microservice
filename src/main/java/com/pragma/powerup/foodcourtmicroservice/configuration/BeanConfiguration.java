@@ -44,9 +44,8 @@ public class BeanConfiguration {
     @Bean
     IRestaurantPersistencePort restaurantPersistencePort(){
         return new RestaurantMysqlAdapter(restaurantRepository,
-                dishRepository,
+                dishPersistencePort(),
                 restaurantEntityMapper,
-                dishEntityMapper,
                 categoryEntityMapper);
     }
 
@@ -58,7 +57,7 @@ public class BeanConfiguration {
 
     @Bean
     IDishPersistencePort dishPersistencePort(){
-        return new DishMysqlAdapter(dishRepository, dishEntityMapper);
+        return new DishMysqlAdapter(dishRepository, dishEntityMapper, restaurantEntityMapper, categoryEntityMapper);
     }
 
     @Bean

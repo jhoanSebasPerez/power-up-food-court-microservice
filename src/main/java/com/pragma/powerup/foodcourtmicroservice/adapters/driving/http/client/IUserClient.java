@@ -14,4 +14,10 @@ public interface IUserClient {
     Map<String, Boolean> isOwner(
             @Param("token")String token,
             @Param("userId") String userDni);
+
+
+    @RequestLine("GET /user-service/employee/{employeeDni}/find-restaurant")
+    Map<String, Long> findRestaurantIdByDni(
+            @Param("token")String token,
+            @Param("employeeDni") String employeeDni);
 }

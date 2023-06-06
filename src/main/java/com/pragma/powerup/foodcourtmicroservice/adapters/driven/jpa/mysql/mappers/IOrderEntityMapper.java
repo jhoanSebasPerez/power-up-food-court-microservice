@@ -5,6 +5,8 @@ import com.pragma.powerup.foodcourtmicroservice.domain.model.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(uses = IOrderDishEntityMapper.class,
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -12,4 +14,8 @@ import org.mapstruct.ReportingPolicy;
 public interface IOrderEntityMapper {
 
     OrderEntity toEntity(Order order);
+
+    Order toModel(OrderEntity orderEntity);
+
+    List<Order> toModelList(List<OrderEntity> entityList);
 }

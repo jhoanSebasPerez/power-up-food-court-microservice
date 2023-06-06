@@ -3,10 +3,7 @@ package com.pragma.powerup.foodcourtmicroservice.configuration;
 
 import com.pragma.powerup.foodcourtmicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFound;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.exceptions.ClientErrorException;
-import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.CategoryNotFoundException;
-import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.ClientHasOrderInprocessException;
-import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.DishesNotBelongRestaurantException;
-import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.NotRestaurantOwnerException;
+import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -65,6 +62,12 @@ public class ControllerAdvisor {
     public ResponseEntity<Map<String, String>> handleRestaurantNotFound(RestaurantNotFound restaurantNotFound) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Collections.singletonMap(Constants.ERROR_MESSAGE_KEY, "Restaurant not found with that id"));
+    }
+
+    @ExceptionHandler(StateInvalidException.class)
+    public ResponseEntity<Map<String, String>> handleRestaurantNotFound(StateInvalidException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(Constants.ERROR_MESSAGE_KEY, "Please provide a valid status"));
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)

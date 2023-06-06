@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -32,7 +34,7 @@ class IOrderRepositoryTest {
     @BeforeEach
     void setUp() {
         OrderEntity order = OrderEntity.builder()
-                .state(OrderState.PENDING.toString())
+                .state(OrderState.CANCELLED.toString())
                 .restaurant(RestaurantEntity.builder().id(2L).build())
                 .dishes(new ArrayList<>())
                 .clientId(CLIENT_ID)
@@ -42,14 +44,21 @@ class IOrderRepositoryTest {
         orderRepository.save(order);
 
         OrderEntity order2 = OrderEntity.builder()
-                .state(OrderState.COMPLETED.toString())
+                .state(OrderState.PENDING.toString())
                 .restaurant(RestaurantEntity.builder().id(2L).build())
                 .dishes(new ArrayList<>())
                 .date(new Date())
                 .clientId(CLIENT_ID)
                 .build();
 
-        orderRepository.save(order2);
+        OrderEntity orderSaved2 = orderRepository.save(order2);
+
+        orderSaved2.setDishes(List.of(
+                OrderDishEntity.builder().dish(DishEntity.builder().id(3L).build()).order(OrderEntity.builder().id(orderSaved2.getId()).build()).quantity(2).build(),
+                OrderDishEntity.builder().dish(DishEntity.builder().id(4L).build()).order(OrderEntity.builder().id(orderSaved2.getId()).build()).quantity(3).build()
+        ));
+
+        orderRepository.save(orderSaved2);
     }
 
     @Test
@@ -84,5 +93,16 @@ class IOrderRepositoryTest {
 
         assertTrue(result);
 
+    }
+
+    @Test
+    void findOrdersByRestaurantId() {
+        Long restaurantId = 2L;
+        PageRequest pageRequest = PageRequest.of(0, 2);
+
+        Page<OrderEntity> orders = orderRepository.findAllByRestaurantIdAAndState(restaurantId,
+                OrderState.PENDING.toString(), pageRequest);
+
+        assertNotNull(orders);
     }
 }

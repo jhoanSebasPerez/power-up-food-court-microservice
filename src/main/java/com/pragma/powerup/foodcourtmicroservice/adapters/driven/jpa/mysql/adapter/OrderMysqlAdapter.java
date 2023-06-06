@@ -11,6 +11,8 @@ import com.pragma.powerup.foodcourtmicroservice.domain.model.Order;
 import com.pragma.powerup.foodcourtmicroservice.domain.model.OrderState;
 import com.pragma.powerup.foodcourtmicroservice.domain.spi.IOrderPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -21,6 +23,9 @@ import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class OrderMysqlAdapter implements IOrderPersistencePort {
+
+    private static final Integer DEFAULT_PAGE_NUMBER = 1;
+    private static final Integer DEFAULT_PAGE_SIZE = 2;
 
     private final IOrderRepository orderRepository;
     private final IOrderEntityMapper orderEntityMapper;
@@ -63,5 +68,33 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
         Date fromDate = Date.from(LocalDateTime.now().minusHours(3).toInstant(ZoneOffset.of("-05:00")));
 
         return orderRepository.existsOrderInProcess(ordersIdByClient, states, fromDate);
+    }
+
+    @Override
+    public List<Order> findAllByRestaurantAndState(Long restaurantId, String state, Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
+        List<OrderEntity> orderEntities = orderRepository
+                .findAllByRestaurantIdAAndState(restaurantId, state, pageRequest).getContent();
+
+        return orderEntityMapper.toModelList(orderEntities);
+    }
+
+    private PageRequest buildPageRequest(Integer pageNumber, Integer pageSize){
+        int requestPageNumber;
+        int requestPageSize;
+
+        if(pageNumber != null && pageNumber > 0)
+            requestPageNumber = pageNumber;
+        else
+            requestPageNumber = DEFAULT_PAGE_NUMBER;
+
+        if(pageSize != null && pageSize > 0)
+            requestPageSize = pageSize;
+        else
+            requestPageSize = DEFAULT_PAGE_SIZE;
+
+        Sort sort = Sort.by(Sort.Order.desc("date"));
+
+        return PageRequest.of(requestPageNumber - 1, requestPageSize, sort);
     }
 }

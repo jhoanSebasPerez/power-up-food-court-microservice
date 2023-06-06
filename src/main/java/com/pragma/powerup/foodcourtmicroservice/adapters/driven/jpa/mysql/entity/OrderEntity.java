@@ -39,7 +39,7 @@ public class OrderEntity {
 
     @OneToMany(
             mappedBy = "order",
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
     private List<OrderDishEntity> dishes;

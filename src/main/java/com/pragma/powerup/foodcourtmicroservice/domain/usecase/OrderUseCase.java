@@ -3,12 +3,14 @@ package com.pragma.powerup.foodcourtmicroservice.domain.usecase;
 import com.pragma.powerup.foodcourtmicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.ClientHasOrderInprocessException;
 import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.DishesNotBelongRestaurantException;
+import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.StateInvalidException;
 import com.pragma.powerup.foodcourtmicroservice.domain.model.Order;
 import com.pragma.powerup.foodcourtmicroservice.domain.model.OrderState;
 import com.pragma.powerup.foodcourtmicroservice.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.foodcourtmicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.foodcourtmicroservice.domain.spi.IRestaurantPersistencePort;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class OrderUseCase implements IOrderServicePort {
@@ -43,5 +45,16 @@ public class OrderUseCase implements IOrderServicePort {
         order.setState(OrderState.PENDING);
 
         orderPersistencePort.saveOrder(order);
+    }
+
+    @Override
+    public List<Order> findAllByRestaurantAndState(Long restaurantId, String state, Integer pageNumber, Integer pageSize) {
+        state = state.toUpperCase();
+        boolean isStateValid =  Arrays.stream(OrderState.values()).map(Enum::toString).toList().contains(state);
+
+        if(!isStateValid)
+            throw new StateInvalidException();
+
+        return orderPersistencePort.findAllByRestaurantAndState(restaurantId, state, pageNumber, pageSize);
     }
 }

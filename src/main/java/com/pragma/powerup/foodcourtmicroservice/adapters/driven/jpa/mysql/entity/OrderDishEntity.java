@@ -23,7 +23,7 @@ public class OrderDishEntity {
     @JoinColumn(name = "order_id")
     private OrderEntity order;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("dishId")
     @JoinColumn(name = "dish_id")
     private DishEntity dish;
