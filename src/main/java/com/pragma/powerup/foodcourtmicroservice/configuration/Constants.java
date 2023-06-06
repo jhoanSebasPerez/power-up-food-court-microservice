@@ -39,4 +39,7 @@ public class Constants {
      */
     public static final String ORDER_CREATED_MESSAGE = "order created successful";
 
+    public static final String CLIENT_HAS_ORDERS_IN_PROCESS =
+            "The customer has pending orders, therefore cannot place a new order.";
+
 }

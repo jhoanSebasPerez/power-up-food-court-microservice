@@ -4,6 +4,7 @@ package com.pragma.powerup.foodcourtmicroservice.configuration;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFound;
 import com.pragma.powerup.foodcourtmicroservice.adapters.driving.http.exceptions.ClientErrorException;
 import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.CategoryNotFoundException;
+import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.ClientHasOrderInprocessException;
 import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.DishesNotBelongRestaurantException;
 import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.NotRestaurantOwnerException;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,12 @@ public class ControllerAdvisor {
     public ResponseEntity<Map<String, String>> handleClientErrorException(ClientErrorException clientErrorException) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Collections.singletonMap(Constants.ERROR_MESSAGE_KEY, clientErrorException.getMessage()));
+    }
+
+    @ExceptionHandler(ClientHasOrderInprocessException.class)
+    public ResponseEntity<Map<String, String>> handleClientErrorException(ClientHasOrderInprocessException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(Constants.ERROR_MESSAGE_KEY, Constants.CLIENT_HAS_ORDERS_IN_PROCESS));
     }
 
     @ExceptionHandler(RestaurantNotFound.class)
