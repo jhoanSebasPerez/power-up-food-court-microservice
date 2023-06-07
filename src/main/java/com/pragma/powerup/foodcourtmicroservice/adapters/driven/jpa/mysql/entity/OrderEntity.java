@@ -3,7 +3,8 @@ package com.pragma.powerup.foodcourtmicroservice.adapters.driven.jpa.mysql.entit
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,8 +24,9 @@ public class OrderEntity {
     private String clientId;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    //@Temporal(TemporalType.TIMESTAMP)
+    @Basic
+    private LocalDateTime date;
 
     private String state;
 

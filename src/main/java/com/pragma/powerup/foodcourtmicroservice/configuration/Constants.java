@@ -42,4 +42,6 @@ public class Constants {
     public static final String CLIENT_HAS_ORDERS_IN_PROCESS =
             "The customer has pending orders, therefore cannot place a new order.";
 
+    public static final String ORDER_CHANGE_IN_PROCESS = "The orders have changed status to IN PREPARATION";
+
 }

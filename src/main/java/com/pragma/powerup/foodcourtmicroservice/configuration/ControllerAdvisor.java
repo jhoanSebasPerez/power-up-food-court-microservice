@@ -64,6 +64,12 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(Constants.ERROR_MESSAGE_KEY, "Restaurant not found with that id"));
     }
 
+    @ExceptionHandler(OrdersNotBelongRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handleRestaurantNotFound(OrdersNotBelongRestaurantException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(Constants.ERROR_MESSAGE_KEY, "Orders not belong to restaurant"));
+    }
+
     @ExceptionHandler(StateInvalidException.class)
     public ResponseEntity<Map<String, String>> handleRestaurantNotFound(StateInvalidException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

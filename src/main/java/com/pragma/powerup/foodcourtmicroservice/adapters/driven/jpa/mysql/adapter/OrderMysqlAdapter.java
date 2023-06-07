@@ -15,9 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -65,7 +63,7 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
                 .map(Enum::toString).toList();
 
         //to filter by date three hours before
-        Date fromDate = Date.from(LocalDateTime.now().minusHours(3).toInstant(ZoneOffset.of("-05:00")));
+        LocalDateTime fromDate = LocalDateTime.now().minusHours(3);
 
         return orderRepository.existsOrderInProcess(ordersIdByClient, states, fromDate);
     }
@@ -77,6 +75,16 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
                 .findAllByRestaurantIdAAndState(restaurantId, state, pageRequest).getContent();
 
         return orderEntityMapper.toModelList(orderEntities);
+    }
+
+    @Override
+    public boolean ordersBelongToRestaurant(List<Long> orders, Long restaurantId) {
+        return orderRepository.ordersBelongToRestaurant(orders, restaurantId, orders.size());
+    }
+
+    @Override
+    public void assignToOrderAndChangeToInPreparation(String chefDni, List<Long> orders) {
+        orderRepository.assignToOrderAndChangeToInPreparation(chefDni, orders);
     }
 
     private PageRequest buildPageRequest(Integer pageNumber, Integer pageSize){

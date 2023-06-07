@@ -9,4 +9,6 @@ public interface IOrderServicePort {
     void saveOrder(Order order);
 
     List<Order> findAllByRestaurantAndState(Long restaurantId, String state, Integer pageNumber, Integer pageSize);
+
+    void assignToOrderAndChangeToInPreparation(String chefDni, Long restaurantId, List<Long> orders);
 }

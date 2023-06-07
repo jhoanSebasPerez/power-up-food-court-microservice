@@ -36,17 +36,29 @@ public class OrderHandlerImpl implements IOrderHandler {
 
     @Override
     public List<OrderResponseDto> findAllByRestaurantAndState(String token, String state, Integer pageNumber, Integer pageSize) {
+        Long restaurantId = getRestaurantId(token);
+
+        List<Order> orders = orderServicePort.findAllByRestaurantAndState(restaurantId, state, pageNumber, pageSize);
+
+        return orderResponseMapper.toResponseList(orders);
+
+    }
+
+    @Override
+    public void assignToOrderAndChangeToInPreparation(String token, List<Long> orders) {
+        Long restaurantId = getRestaurantId(token);
+        String chefDni = JwtUtil.getDniFromToken(token);
+
+        orderServicePort.assignToOrderAndChangeToInPreparation(chefDni, restaurantId, orders);
+    }
+
+    private Long getRestaurantId(String token){
         String employeeDni = JwtUtil.getDniFromToken(token);
 
         Map<String, Long> result = userClient.findRestaurantIdByDni(token, employeeDni);
         if(result == null)
             throw new ClientErrorException("The employee is not assigned to a restaurant");
 
-        Long restaurantId = result.get("restaurant");
-
-        List<Order> orders = orderServicePort.findAllByRestaurantAndState(restaurantId, state, pageNumber, pageSize);
-
-        return orderResponseMapper.toResponseList(orders);
-
+        return result.get("restaurant");
     }
 }

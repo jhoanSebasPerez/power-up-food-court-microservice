@@ -1,13 +1,13 @@
 package com.pragma.powerup.foodcourtmicroservice.domain.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Order {
 
     private Long id;
     private String clientId;
-    private Date date;
+    private LocalDateTime date;
     private OrderState state;
     private String chefDni;
     private Restaurant restaurant;
@@ -15,7 +15,7 @@ public class Order {
 
     public Order(){}
 
-    public Order(Long id, String clientId, Date date, OrderState state, String chefDni,
+    public Order(Long id, String clientId, LocalDateTime date, OrderState state, String chefDni,
                  Restaurant restaurant, List<OrderDish> dishes) {
         this.id = id;
         this.clientId = clientId;
@@ -42,11 +42,11 @@ public class Order {
         this.clientId = clientId;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

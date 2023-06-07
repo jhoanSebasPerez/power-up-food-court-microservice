@@ -10,4 +10,6 @@ public interface IOrderHandler{
     void saveOrder(String token, OrderRequestDto orderRequestDto);
 
     List<OrderResponseDto> findAllByRestaurantAndState(String token, String state, Integer pageNumber, Integer pageSize);
+
+    void assignToOrderAndChangeToInPreparation(String token, List<Long> orders);
 }

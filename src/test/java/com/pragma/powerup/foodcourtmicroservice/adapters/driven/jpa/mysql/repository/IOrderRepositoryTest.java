@@ -6,6 +6,7 @@ import com.pragma.powerup.foodcourtmicroservice.adapters.driven.jpa.mysql.entity
 import com.pragma.powerup.foodcourtmicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.foodcourtmicroservice.domain.model.Order;
 import com.pragma.powerup.foodcourtmicroservice.domain.model.OrderState;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,12 @@ class IOrderRepositoryTest {
     @BeforeEach
     void setUp() {
         OrderEntity order = OrderEntity.builder()
-                .state(OrderState.CANCELLED.toString())
+                .state(OrderState.PENDING.toString())
                 .restaurant(RestaurantEntity.builder().id(2L).build())
                 .dishes(new ArrayList<>())
                 .clientId(CLIENT_ID)
-                .date(Date.from(LocalDateTime.now().minusHours(8).toInstant(ZoneOffset.of("-05:00"))))
+                //.date(Date.from(LocalDateTime.now().minusHours(8).toInstant(ZoneOffset.of("-05:00"))))
+                .date(LocalDateTime.now().minusHours(2))
                 .build();
 
         orderRepository.save(order);
@@ -47,7 +49,7 @@ class IOrderRepositoryTest {
                 .state(OrderState.PENDING.toString())
                 .restaurant(RestaurantEntity.builder().id(2L).build())
                 .dishes(new ArrayList<>())
-                .date(new Date())
+                .date(LocalDateTime.now())
                 .clientId(CLIENT_ID)
                 .build();
 
@@ -87,11 +89,12 @@ class IOrderRepositoryTest {
         List<Long> ordersByClient = orderRepository.findAllByClientId(CLIENT_ID);
         List<String> states = Stream.of(OrderState.PENDING, OrderState.IN_PREPARATION, OrderState.COMPLETED)
                 .map(Enum::toString).toList();
-        Date fromDate = Date.from(LocalDateTime.now().minusHours(3).toInstant(ZoneOffset.of("-05:00")));
+        //Date fromDate = Date.from(LocalDateTime.now().minusHours(3).toInstant(ZoneOffset.of("-05:00")));
+        LocalDateTime fromDate = LocalDateTime.now().minusHours(3);
 
-        boolean result = orderRepository.existsOrderInProcess(ordersByClient, states, fromDate);
+        List<OrderEntity> result = orderRepository.findByStateAndDate(ordersByClient, states, fromDate);
 
-        assertTrue(result);
+        assertNotNull(result);
 
     }
 
@@ -104,5 +107,29 @@ class IOrderRepositoryTest {
                 OrderState.PENDING.toString(), pageRequest);
 
         assertNotNull(orders);
+    }
+
+
+    @Test
+    void    assignToOrderAndChangeToInPreparation() {
+        String chefDni = "0101010";
+        String state = OrderState.IN_PREPARATION.toString();
+        List<Long> orders = List.of(1L, 2L);
+
+        orderRepository.assignToOrderAndChangeToInPreparation(chefDni, orders);
+
+        OrderEntity orderUpdated1 = orderRepository.findAll().get(0);
+        OrderEntity orderUpdated2 = orderRepository.findAll().get(1);
+        assertEquals(OrderState.IN_PREPARATION.toString(), orderUpdated1.getState());
+    }
+
+    @Test
+    void ordersBelongToRestaurant() {
+        Long restaurantId = 2L;
+        List<Long> orders = List.of(1L, 3L);
+
+        boolean result = orderRepository.ordersBelongToRestaurant(orders, restaurantId, orders.size());
+
+        assertTrue(result);
     }
 }

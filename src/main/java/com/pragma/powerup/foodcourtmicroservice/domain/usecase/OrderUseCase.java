@@ -3,6 +3,7 @@ package com.pragma.powerup.foodcourtmicroservice.domain.usecase;
 import com.pragma.powerup.foodcourtmicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.ClientHasOrderInprocessException;
 import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.DishesNotBelongRestaurantException;
+import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.OrdersNotBelongRestaurantException;
 import com.pragma.powerup.foodcourtmicroservice.domain.exceptions.StateInvalidException;
 import com.pragma.powerup.foodcourtmicroservice.domain.model.Order;
 import com.pragma.powerup.foodcourtmicroservice.domain.model.OrderState;
@@ -56,5 +57,12 @@ public class OrderUseCase implements IOrderServicePort {
             throw new StateInvalidException();
 
         return orderPersistencePort.findAllByRestaurantAndState(restaurantId, state, pageNumber, pageSize);
+    }
+
+    @Override
+    public void assignToOrderAndChangeToInPreparation(String chefDni, Long restaurantId, List<Long> orders) {
+        if(!orderPersistencePort.ordersBelongToRestaurant(orders, restaurantId))
+            throw new OrdersNotBelongRestaurantException();
+        orderPersistencePort.assignToOrderAndChangeToInPreparation(chefDni, orders);
     }
 }

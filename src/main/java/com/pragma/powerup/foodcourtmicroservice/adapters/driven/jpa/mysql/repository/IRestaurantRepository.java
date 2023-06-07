@@ -11,4 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface IRestaurantRepository extends JpaRepository<RestaurantEntity, Long> {
     @Query("SELECT name AS name, urlLogo AS urlLogo FROM  RestaurantEntity restaurant")
     Page<IRestaurantItemView> findAllRestaurant(Pageable pageable);
+
+
 }

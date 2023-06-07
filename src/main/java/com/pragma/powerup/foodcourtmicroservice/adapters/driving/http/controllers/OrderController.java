@@ -57,4 +57,19 @@ public class OrderController {
         List<OrderResponseDto> response = orderHandler.findAllByRestaurantAndState(token, state, pageNumber, pageSize);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "List orders by state and pagination",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "List of orders",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+            })
+    @PutMapping("change-to-in-preparation")
+    @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+    ResponseEntity<Map<String, String>> assignToOrderAndChangeToInPreparation(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody List<Long> orders){
+        orderHandler.assignToOrderAndChangeToInPreparation(token, orders);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CHANGE_IN_PROCESS));
+    }
 }

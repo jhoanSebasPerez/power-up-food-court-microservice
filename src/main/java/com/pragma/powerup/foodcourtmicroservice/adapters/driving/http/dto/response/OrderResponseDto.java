@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -18,7 +18,7 @@ public class OrderResponseDto {
 
     private Long id;
     private String clientId;
-    private Date date;
+    private LocalDateTime date;
     private OrderState state;
     private String chefDni;
     private Restaurant restaurant;
